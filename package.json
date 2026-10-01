@@ -1,0 +1,33 @@
+{
+  "name": "vehicle-rentals",
+  "version": "1.0.0",
+  "author": "Mark James Espinosa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "seed": "tsx scripts/seed.ts",
+    "migrate:legacy": "tsx scripts/migrate-legacy-data.ts"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^2.18.7",
+    "date-fns": "^3.6.0",
+    "firebase": "^10.13.2",
+    "firebase-admin": "^12.5.0",
+    "nuxt": "^4.0.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
