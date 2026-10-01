@@ -30,6 +30,9 @@ export default defineNuxtConfig({
       title: `${process.env.NUXT_PUBLIC_SITE_NAME || 'RentRide'} — Cars & Motorcycles for Rent`,
       meta: [
         { name: 'description', content: 'Rent cars and motorcycles by the day, week or month. Live availability, transparent rates, pickup or delivery.' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
       ]
     }
   },
