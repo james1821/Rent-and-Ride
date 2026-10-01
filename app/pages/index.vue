@@ -4,7 +4,7 @@ const { fetchProducts, fetchCategories, fetchBrands } = useCatalog()
 // Default hero, used when the admin hasn't created any "hero" banners.
 const defaultSlides = [
   {
-    title: 'Your next ride, ready when you are.',
+    title: 'Go anywhere, anytime. Rent a car or motorcycle today.',
     description: 'Cars and motorcycles for daily, weekly and monthly rental. Live availability, clear rates, pickup or delivery.',
     ctaLabel: 'Browse Cars',
     ctaHref: '/catalog?vehicleType=car',
@@ -104,7 +104,7 @@ const perks = [
       <div class="grid gap-5 md:grid-cols-3">
         <div v-for="perk in perks" :key="perk.title" class="rounded-xl border border-line bg-surface p-6 shadow-card transition hover:border-ink">
           <span class="flex h-12 w-12 items-center justify-center rounded-full bg-ink text-volt"><UIcon :name="perk.icon" class="h-6 w-6" /></span>
-          <h3 class="mt-5 text-xl">{{ perk.title }}</h3>
+          <h5 class="mt-5 text-lg">{{ perk.title }}</h5>
           <p class="mt-2 text-sm text-ink-muted">{{ perk.text }}</p>
         </div>
       </div>

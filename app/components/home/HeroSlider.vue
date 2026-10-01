@@ -44,7 +44,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
 
           <div class="container-page relative flex h-full flex-col justify-center py-20">
             <p class="eyebrow !text-volt animate-fade-up">Cars &amp; motorcycles for rent</p>
-            <h1 class="mt-5 max-w-4xl text-[clamp(2.75rem,9vw,7.5rem)] animate-fade-up" style="animation-delay: .08s">{{ slide.title }}</h1>
+            <h1 class="mt-5 max-w-4xl text-[clamp(2.75rem,9vw,5rem)] animate-fade-up" style="animation-delay: .08s">{{ slide.title }}</h1>
             <p class="mt-6 max-w-xl text-base text-white/70 sm:text-lg animate-fade-up" style="animation-delay: .16s">{{ slide.description }}</p>
             <div class="mt-9 flex flex-wrap gap-3 animate-fade-up" style="animation-delay: .24s">
               <NuxtLink :to="slide.ctaHref" class="btn-light !px-8 !py-4 text-base">
