@@ -26,15 +26,41 @@ export default defineNuxtConfig({
   colorMode: { preference: 'light', fallback: 'light' },
 
   app: {
+    // A short cross-fade between routes/layouts so navigation feels responsive
+    // even while data is still loading (the new page shows its skeleton).
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'page', mode: 'out-in' },
     head: {
       title: `${process.env.NUXT_PUBLIC_SITE_NAME || 'RentRide'} — Cars & Motorcycles for Rent`,
       meta: [
         { name: 'description', content: 'Rent cars and motorcycles by the day, week or month. Live availability, transparent rates, pickup or delivery.' }
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        // Preconnect + load fonts from the document head instead of a
+        // render-blocking @import inside the stylesheet.
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap'
+        }
       ]
     }
+  },
+
+  // Cache public, rarely-changing GET endpoints on the server. Firestore reads
+  // are the main source of latency; SWR serves them from cache while
+  // revalidating in the background. Write endpoints (POST/PUT/DELETE) and
+  // admin routes are never cached.
+  routeRules: {
+    '/api/categories': { swr: 300 },
+    '/api/subcategories': { swr: 300 },
+    '/api/banners': { swr: 300 },
+    '/api/popup': { swr: 300 },
+    '/api/settings/**': { swr: 600 },
+    '/api/products/facets': { swr: 300 },
+    '/api/search': { swr: 30 }
   },
 
   typescript: {
@@ -50,8 +76,18 @@ export default defineNuxtConfig({
       privateKey: process.env.FIREBASE_PRIVATE_KEY
     },
 
-    // Where admin-uploaded images are stored on the server's disk (served at /uploads/*).
-    // Must be a persistent directory in production.
+    // Cloudinary (server-only). Admin uploads are sent here and the returned
+    // HTTPS URL is stored in Firestore. Works from any environment, including
+    // serverless hosts with an ephemeral filesystem (Vercel/Netlify/Cloud Run).
+    cloudinary: {
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+      apiSecret: process.env.CLOUDINARY_API_SECRET,
+      folder: process.env.CLOUDINARY_FOLDER || 'rentandride'
+    },
+
+    // Legacy: directory where pre-Cloudinary uploads live (served at /uploads/*).
+    // Kept only so previously-uploaded images still resolve in local dev.
     uploadDir: process.env.UPLOAD_DIR || './uploads',
 
     // Exposed to the client via useRuntimeConfig().public

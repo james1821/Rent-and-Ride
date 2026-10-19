@@ -69,7 +69,7 @@ Top-level catalog groupings (e.g. Sedans, SUVs, Scooters, Sport Bikes ...). Full
 | `name` | string | |
 | `slug` | string | Unique, used in URLs |
 | `description` | string? | |
-| `imageUrl` | string? | http(s) URL or `/uploads/...` path |
+| `imageUrl` | string? | http(s) URL (Cloudinary upload) or legacy `/uploads/...` path |
 | `sortOrder` | number | Drives display order, admin-editable via drag reorder |
 | `status` | `'active' \| 'inactive'` | |
 | `createdAt` / `updatedAt` | Timestamp | |
@@ -116,7 +116,7 @@ several identical vehicles, `quantityTotal` is the count; individual vehicles
 | `description` | string | |
 | `vehicle` | `VehicleInfo` | Structured vehicle facts, see below. Required when creating; legacy documents may lack it |
 | `specifications` | array<{ label: string, value: string }> | Free-form extra specs (features, luggage, …) rendered as a table |
-| `images` | array<string> | http(s) URLs or `/uploads/...` paths, first is primary |
+| `images` | array<string> | http(s) URLs (Cloudinary uploads) or legacy `/uploads/...` paths, first is primary |
 | `pricing` | `{ daily: number, weekly?: number, monthly?: number, deposit: number }` | **Server is the only writer of truth used at checkout** — see pricing.ts |
 | `quantityTotal` | number | Denormalized count of `inventory` docs for this product |
 | `quantityAvailable` | number | **Cache only** — real availability is always recomputed server-side per date range against `rentals`; this field is for catalog-browsing display and sort, not for checkout decisions |
@@ -458,7 +458,7 @@ only through `GET /api/popup`, which applies the schedule.
 |---|---|---|
 | `enabled` | boolean | Master switch |
 | `title` / `description` / `secondaryText` | string | Copy (secondaryText is the small line above the title) |
-| `imageUrl` | string | Optional banner (uploaded via `/api/admin/upload-image` (saved to `UPLOAD_DIR`) or any URL) |
+| `imageUrl` | string | Optional banner (uploaded via `/api/admin/upload-image` (stored in Cloudinary) or any URL) |
 | `ctaLabel` / `ctaHref` | string | Optional button; `ctaHref` must be `/path` or `http(s)://…` |
 | `frequency` | `'once' \| 'session' \| 'daily' \| 'weekly'` | How often a visitor who dismissed it sees it again |
 | `firstVisitOnly` | boolean | Only visitors with no earlier visit in that browser |

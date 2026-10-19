@@ -1,8 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Route transitions (see app.pageTransition in nuxt.config.ts). Short and
+   subtle so navigation feels snappy rather than sluggish. */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
 
 :root {
   --canvas: #F5F5F2;

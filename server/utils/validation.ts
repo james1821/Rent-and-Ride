@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
-// Images are either an http(s) URL or a file uploaded through the admin
-// (served from this app at /uploads/...).
+// Images are either an http(s) URL (Cloudinary uploads return an https URL) or
+// a legacy file uploaded through the admin and served from this app at
+// /uploads/...
 export const imageUrlSchema = z.string().refine(
   (v) => v.startsWith('/uploads/') || /^https?:\/\/\S+$/.test(v),
   'Must be an http(s) URL or an uploaded image'

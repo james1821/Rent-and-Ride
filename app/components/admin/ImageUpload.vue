@@ -10,7 +10,7 @@ const uploading = ref(false)
 const broken = ref(false)
 watch(() => props.modelValue, () => { broken.value = false })
 
-const MAX_BYTES = 5 * 1024 * 1024
+const MAX_BYTES = 4 * 1024 * 1024
 
 async function onPick(e: Event) {
   const input = e.target as HTMLInputElement
@@ -18,7 +18,7 @@ async function onPick(e: Event) {
   input.value = '' // allow re-selecting the same file
   if (!file) return
   if (!file.type.startsWith('image/')) { toast.add({ title: 'Please choose an image file', color: 'red' }); return }
-  if (file.size > MAX_BYTES) { toast.add({ title: 'Image must be 5 MB or smaller', color: 'red' }); return }
+  if (file.size > MAX_BYTES) { toast.add({ title: 'Image must be 4 MB or smaller', color: 'red' }); return }
 
   uploading.value = true
   try {

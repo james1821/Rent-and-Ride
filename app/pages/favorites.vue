@@ -28,7 +28,7 @@ watch(productIds, async (ids) => {
   <div class="container-page py-10">
     <h1 class="text-4xl text-ink sm:text-5xl">Your Favorites</h1>
 
-    <ProductGridSkeleton v-if="loading" class="mt-8" />
+    <ProductGridSkeleton v-if="loading || !currentRole" class="mt-8" />
 
     <div v-else-if="products.length === 0" class="mt-16 rounded border border-dashed border-line py-20 text-center">
       <p class="text-ink-muted">You haven't favorited any vehicles yet.</p>

@@ -12,7 +12,7 @@ availability, pricing and admin architecture is unchanged.)
 **Frontend:** Nuxt 4, Vue 3, TypeScript, Tailwind CSS, Nuxt UI
 **Backend:** Nuxt 4's Nitro server (`server/api/*`) for all business logic,
 pricing, availability, and privileged operations
-**Data/Auth:** Firebase Authentication, Cloud Firestore. Uploaded images are stored on the server's disk (`UPLOAD_DIR`) — no Firebase Storage.
+**Data/Auth:** Firebase Authentication, Cloud Firestore. Uploaded images are stored in Cloudinary (free tier) — no Firebase Storage.
 **Architecture:**
 
 ```
@@ -173,11 +173,26 @@ the footer and Contact page come from **Admin → Settings**.
 
 ## Image uploads
 
-Admin uploads (vehicle photos, popup and banner images) are saved to the server's
-disk in `UPLOAD_DIR` (default `./uploads`) and served at `/uploads/...`. Use a
-persistent directory in production — on hosts with an ephemeral filesystem
-(e.g. most serverless platforms) uploaded files would be lost on redeploy; use
-image URLs there, or mount a volume.
+Admin uploads (vehicle photos, popup and banner images) are sent to
+**Cloudinary** (free tier) and the returned HTTPS URL is saved in Firestore.
+This works identically from local dev and production, including serverless
+hosts (Vercel/Netlify/Cloud Run) whose filesystems are ephemeral.
+
+Setup:
+
+1. Create a free account at https://cloudinary.com and open the Dashboard.
+2. Set these server-only variables in `.env` locally and in your host's
+   environment configuration (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
+   `CLOUDINARY_API_SECRET`, and optionally `CLOUDINARY_FOLDER`).
+3. Redeploy/restart the app. Uploads from **Admin → Vehicles / Banners /
+   Promotional Popup / Settings** will now be served from `res.cloudinary.com`.
+
+Uploads are capped at 4 MB (serverless request-body limit) and limited to JPEG,
+PNG, WebP, AVIF and GIF.
+
+`UPLOAD_DIR` and the `/uploads/:path` route are **legacy**: they only let images
+uploaded before the Cloudinary switch keep resolving in local dev. They are not
+used for new uploads and should not be relied on in production.
 
 ## Promotional popup
 

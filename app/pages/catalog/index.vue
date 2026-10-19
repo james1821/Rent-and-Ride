@@ -20,14 +20,14 @@ const filters = reactive({
   page: route.query.page ? Number(route.query.page) : 1
 })
 
-const { data: categories } = await useAsyncData('catalog-categories', () => fetchCategories())
-const { data: subcategories } = await useAsyncData(
+const { data: categories, pending: categoriesPending } = await usePageData('catalog-categories', () => fetchCategories())
+const { data: subcategories, pending: subcategoriesPending } = await usePageData(
   () => `catalog-subcategories-${filters.categoryId}`,
   () => fetchSubcategories(filters.categoryId || undefined),
   { watch: [() => filters.categoryId] }
 )
 
-const { data: result, pending, refresh } = await useAsyncData(
+const { data: result, pending, refresh } = await usePageData(
   'catalog-products',
   () => fetchProducts({
     q: filters.q || undefined,
@@ -56,7 +56,7 @@ watch(filters, () => {
   router.replace({ query: { ...filters, page: filters.page } as any })
 }, { deep: true })
 
-const { data: brands } = await useAsyncData('catalog-brands', () => fetchBrands())
+const { data: brands, pending: brandsPending } = await usePageData('catalog-brands', () => fetchBrands())
 const filtersOpen = ref(false)
 const activeCount = computed(() => [filters.categoryId, filters.subcategoryId, filters.brand, filters.vehicleType, filters.transmission, filters.fuelType, filters.minSeats, filters.minPrice, filters.maxPrice, filters.availableOnly, filters.q].filter(Boolean).length)
 
@@ -113,23 +113,26 @@ function resetFilters() {
 
             <div>
               <label class="eyebrow" for="f-cat">Category</label>
-              <select id="f-cat" v-model="filters.categoryId" class="input mt-2" @change="filters.subcategoryId = ''">
+              <div v-if="categoriesPending" class="skeleton mt-2 h-10 w-full rounded" />
+              <select v-else id="f-cat" v-model="filters.categoryId" class="input mt-2" @change="filters.subcategoryId = ''">
                 <option value="">All categories</option>
                 <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
               </select>
             </div>
 
-            <div v-if="subcategories?.length">
+            <div v-if="subcategoriesPending || subcategories?.length">
               <label class="eyebrow" for="f-sub">Subcategory</label>
-              <select id="f-sub" v-model="filters.subcategoryId" class="input mt-2">
+              <div v-if="subcategoriesPending" class="skeleton mt-2 h-10 w-full rounded" />
+              <select v-else id="f-sub" v-model="filters.subcategoryId" class="input mt-2">
                 <option value="">All subcategories</option>
                 <option v-for="s in subcategories" :key="s.id" :value="s.id">{{ s.name }}</option>
               </select>
             </div>
 
-            <div v-if="brands?.length">
+            <div v-if="brandsPending || brands?.length">
               <label class="eyebrow" for="f-brand">Brand</label>
-              <select id="f-brand" v-model="filters.brand" class="input mt-2">
+              <div v-if="brandsPending" class="skeleton mt-2 h-10 w-full rounded" />
+              <select v-else id="f-brand" v-model="filters.brand" class="input mt-2">
                 <option value="">All brands</option>
                 <option v-for="b in brands" :key="b" :value="b">{{ b }}</option>
               </select>

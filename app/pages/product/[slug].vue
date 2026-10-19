@@ -10,13 +10,16 @@ const { isAuthenticated } = useAuth()
 const { format } = useCurrency()
 const toast = useToast()
 
-const { data, pending, error } = await useAsyncData(`product-${slug}`, () => fetchProductBySlug(slug))
-if (error.value) {
+const { data, pending, error } = await usePageData(`product-${slug}`, () => fetchProductBySlug(slug))
+
+// On the server a failed lookup should be a real 404 (SEO). On the client keep
+// rendering and show the "not found" branch instead of throwing mid-navigation.
+if (import.meta.server && error.value) {
   throw createError({ statusCode: 404, statusMessage: 'Vehicle not found' })
 }
 
-const product = computed(() => data.value!.product)
-const related = computed(() => data.value!.related)
+const product = computed(() => data.value?.product)
+const related = computed(() => data.value?.related ?? [])
 
 const activeImage = ref(0)
 watch(product, (p) => { if (p) activeImage.value = 0 })
@@ -31,7 +34,7 @@ const checkingAvailability = ref(false)
 const addingToCart = ref(false)
 
 async function runAvailabilityCheck() {
-  if (!startDate.value || !endDate.value || endDate.value < startDate.value) {
+  if (!product.value || !startDate.value || !endDate.value || endDate.value < startDate.value) {
     availability.value = null
     return
   }
@@ -44,21 +47,26 @@ async function runAvailabilityCheck() {
     checkingAvailability.value = false
   }
 }
-watch([startDate, endDate, quantity], runAvailabilityCheck, { immediate: true })
+watch([startDate, endDate, quantity, product], runAvailabilityCheck, { immediate: true })
 
 const disabledDates = ref<Set<string>>(new Set())
-onMounted(async () => {
-  const from = tomorrow
-  const to = new Date(Date.now() + 90 * 86400000).toISOString().slice(0, 10)
-  try {
-    const calendar = await fetchCalendar(product.value.id, from, to)
-    disabledDates.value = new Set(Object.entries(calendar.days).filter(([, qty]) => qty <= 0).map(([day]) => day))
-  } catch {
-    disabledDates.value = new Set()
-  }
-})
+// Client-only: the product arrives after mount on client-side navigation, so
+// watch it rather than reading it in onMounted.
+if (import.meta.client) {
+  watch(product, async (p) => {
+    if (!p) return
+    const from = tomorrow
+    const to = new Date(Date.now() + 90 * 86400000).toISOString().slice(0, 10)
+    try {
+      const calendar = await fetchCalendar(p.id, from, to)
+      disabledDates.value = new Set(Object.entries(calendar.days).filter(([, qty]) => qty <= 0).map(([day]) => day))
+    } catch {
+      disabledDates.value = new Set()
+    }
+  }, { immediate: true })
+}
 
-const specChips = computed(() => vehicleSpecChips(product.value.vehicle))
+const specChips = computed(() => (product.value ? vehicleSpecChips(product.value.vehicle) : []))
 const imageBroken = ref(false)
 watch(activeImage, () => { imageBroken.value = false })
 
@@ -110,9 +118,9 @@ async function onToggleFavorite() {
 </script>
 
 <template>
-  <div v-if="pending" class="container-page py-20 text-center text-ink-muted">Loading...</div>
+  <ProductDetailSkeleton v-if="pending" />
 
-  <div v-else class="container-page py-8 sm:py-12">
+  <div v-else-if="product" class="container-page py-8 sm:py-12">
     <NuxtLink to="/catalog" class="inline-flex items-center gap-1 text-sm font-bold text-ink-muted transition hover:text-ink">
       <UIcon name="i-heroicons-arrow-left" class="h-4 w-4" /> All vehicles
     </NuxtLink>
@@ -256,5 +264,11 @@ async function onToggleFavorite() {
         <ProductCard v-for="p in related" :key="p.id" :product="p" />
       </div>
     </section>
+  </div>
+
+  <div v-else class="container-page py-20 text-center">
+    <UIcon name="i-heroicons-truck" class="mx-auto h-12 w-12 text-ink-faint" />
+    <p class="mt-4 font-semibold text-ink">We couldn't find that vehicle.</p>
+    <NuxtLink to="/catalog" class="btn-outline mt-5">Browse all vehicles</NuxtLink>
   </div>
 </template>

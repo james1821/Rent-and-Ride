@@ -14,7 +14,7 @@ const defaultSlides = [
 ]
 
 // Hero slides are managed in Admin → Banners (placement: hero).
-const { data: heroSlides } = await useAsyncData('home-hero', async () => {
+const { data: heroSlides } = await usePageData('home-hero', async () => {
   try {
     const res = await $fetch<{ success: boolean; data: any[] }>('/api/banners', { query: { placement: 'hero' } })
     return res.success && res.data.length ? res.data : defaultSlides
@@ -23,9 +23,9 @@ const { data: heroSlides } = await useAsyncData('home-hero', async () => {
   }
 })
 
-const { data: categories } = await useAsyncData('home-categories', () => fetchCategories().catch(() => []))
-const { data: brands } = await useAsyncData('home-brands', () => fetchBrands())
-const { data: featured, pending: loadingFeatured } = await useAsyncData('home-featured', () =>
+const { data: categories, pending: categoriesPending } = await usePageData('home-categories', () => fetchCategories().catch(() => []))
+const { data: brands } = await usePageData('home-brands', () => fetchBrands())
+const { data: featured, pending: loadingFeatured } = await usePageData('home-featured', () =>
   fetchProducts({ featuredOnly: true, pageSize: 8 })
 )
 
@@ -70,12 +70,15 @@ const perks = [
       </div>
     </section>
 
-    <section v-if="categories?.length" class="container-page pb-16 sm:pb-24">
+    <section v-if="categoriesPending || categories?.length" class="container-page pb-16 sm:pb-24">
       <div class="mb-8 flex items-end justify-between gap-4">
         <h2 class="text-4xl sm:text-5xl">Browse by category</h2>
         <NuxtLink to="/catalog" class="shrink-0 text-sm font-bold text-ink underline-offset-4 hover:underline">View all →</NuxtLink>
       </div>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div v-if="categoriesPending" class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div v-for="i in 4" :key="i" class="skeleton aspect-[4/3] rounded-2xl" />
+      </div>
+      <div v-else class="grid grid-cols-2 gap-4 md:grid-cols-4">
         <HomeCategoryCard
           v-for="cat in categories" :key="cat.id"
           :name="cat.name"

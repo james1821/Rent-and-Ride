@@ -1,7 +1,10 @@
 import { readFile } from 'node:fs/promises'
 import { extname, resolve, sep } from 'node:path'
 
-// Serves admin-uploaded images from the upload directory (see upload-image.post.ts).
+// LEGACY: serves images uploaded before the switch to Cloudinary (see
+// upload-image.post.ts, which now stores files in Cloudinary). Only useful in
+// local dev, where the old ./uploads folder still exists; on serverless hosts
+// the filesystem is ephemeral and these paths will 404.
 const MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.avif': 'image/avif', '.gif': 'image/gif'
 }

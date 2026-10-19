@@ -113,7 +113,7 @@ this endpoint only provides trusted pricing:
 | GET | `/api/admin/activity-logs` | 🛡️ | Last 200 entries |
 | GET | `/api/admin/popup` | 🛡️ | Current promotional popup config (with defaults) |
 | PUT | `/api/admin/popup` | 🛡️ | Validate + save the popup config; `resetDismissals` bumps `version` |
-| POST | `/api/admin/upload-image` | 🛡️ | `multipart/form-data`: `file` (JPEG/PNG/WebP/AVIF/GIF ≤ 5 MB), `folder` (`popup`\|`products`\|`categories`\|`banners`). Returns `{ url }` |
+| POST | `/api/admin/upload-image` | 🛡️ | `multipart/form-data`: `file` (JPEG/PNG/WebP/AVIF/GIF ≤ 4 MB), `folder` (`popup`\|`products`\|`categories`\|`banners`). Uploads to Cloudinary and returns `{ url, publicId }` |
 
 ## Promotional popup
 
