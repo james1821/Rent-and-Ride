@@ -5,7 +5,7 @@ const { listRentals, setStatus } = useRentals()
 const { format } = useCurrency()
 const toast = useToast()
 
-const { data, refresh, pending } = await useAsyncData('admin-pending-rentals', () => listRentals({ status: 'PENDING', pageSize: 100 }), { server: false })
+const { data, refresh, pending } = await usePageData('admin-pending-rentals', () => listRentals({ status: 'PENDING', pageSize: 100 }), { server: false })
 
 const acting = ref<string | null>(null)
 async function approve(id: string) {
@@ -42,7 +42,7 @@ async function reject(id: string) {
     </AdminTopbar>
 
     <div class="p-6">
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="6" :cols="5" />
 
       <div v-else-if="!data?.items.length" class="rounded border border-dashed border-line p-10 text-center text-ink-muted">
         No pending rentals right now.

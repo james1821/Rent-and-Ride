@@ -8,7 +8,7 @@ const { getRental, cancelRental } = useRentals()
 const { format } = useCurrency()
 const toast = useToast()
 
-const { data: rental, refresh } = await useAsyncData(`rental-${id}`, () => getRental(id))
+const { data: rental, refresh, pending } = await usePageData(`rental-${id}`, () => getRental(id), { server: false })
 
 const cancelling = ref(false)
 async function onCancel() {
@@ -27,7 +27,9 @@ async function onCancel() {
 </script>
 
 <template>
-  <div v-if="rental" class="container-page py-10">
+  <ListSkeleton v-if="pending" class="container-page py-10" :rows="3" />
+
+  <div v-else-if="rental" class="container-page py-10">
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div>
         <p class="font-mono text-sm text-ink-muted">{{ rental.rentalNumber }}</p>
@@ -89,4 +91,6 @@ async function onCancel() {
       </aside>
     </div>
   </div>
+
+  <div v-else class="container-page py-20 text-center text-ink-muted">Rental not found.</div>
 </template>

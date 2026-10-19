@@ -5,7 +5,7 @@ const { apiFetch } = useApi()
 const { format } = useCurrency()
 const search = ref('')
 
-const { data, refresh, pending } = await useAsyncData('admin-products', () =>
+const { data, refresh, pending } = await usePageData('admin-products', () =>
   apiFetch<any>('/api/products', { query: { pageSize: 100 } }),
   { server: false }
 )
@@ -39,7 +39,7 @@ async function archiveProduct(id: string) {
         </NuxtLink>
       </div>
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="8" :cols="6" />
 
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>

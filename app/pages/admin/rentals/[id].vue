@@ -7,7 +7,7 @@ const { getRental, setStatus } = useRentals()
 const { format } = useCurrency()
 const toast = useToast()
 
-const { data: rental, refresh } = await useAsyncData(`admin-rental-${id}`, () => getRental(id), { server: false })
+const { data: rental, refresh, pending } = await usePageData(`admin-rental-${id}`, () => getRental(id), { server: false })
 
 // Mirrors RENTAL_STATUS_TRANSITIONS in server/types — kept here for the UI's
 // "next status" buttons; the server is still the source of truth and will
@@ -42,7 +42,9 @@ async function changeStatus(status: string) {
 </script>
 
 <template>
-  <div v-if="rental">
+  <ListSkeleton v-if="pending" class="p-6" :rows="4" />
+
+  <div v-else-if="rental">
     <AdminTopbar>
       <template #title>
         <div>
@@ -128,4 +130,6 @@ async function changeStatus(status: string) {
       </aside>
     </div>
   </div>
+
+  <div v-else class="p-6 text-ink-muted">Rental not found.</div>
 </template>

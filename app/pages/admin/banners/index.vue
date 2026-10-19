@@ -3,7 +3,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' })
 const { apiFetch } = useApi()
 const toast = useToast()
 
-const { data: banners, refresh, pending } = await useAsyncData('admin-banners', () =>
+const { data: banners, refresh, pending } = await usePageData('admin-banners', () =>
   apiFetch<any[]>('/api/banners', { query: { includeInactive: true } }),
   { server: false }
 )
@@ -58,7 +58,7 @@ async function remove(id: string) {
         <button class="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink-soft" @click="startCreate">+ New Banner</button>
       </div>
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="5" :cols="4" />
       <div v-else class="grid gap-4 sm:grid-cols-2">
         <div v-for="b in banners" :key="b.id" class="overflow-hidden rounded border border-line bg-surface">
           <img v-if="b.imageUrl" :src="b.imageUrl" class="h-32 w-full object-cover" :alt="b.title">

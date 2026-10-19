@@ -29,7 +29,7 @@ function toLocal(iso: string) {
 }
 const toIso = (local: string) => (local ? new Date(local).toISOString() : '')
 
-const { data, pending, error } = await useAsyncData('admin-popup', () => apiFetch<any>('/api/admin/popup'), { server: false })
+const { data, pending, error } = await usePageData('admin-popup', () => apiFetch<any>('/api/admin/popup'), { server: false })
 watch(data, (d) => {
   if (!d) return
   Object.assign(form, {
@@ -78,7 +78,7 @@ async function save() {
     </AdminTopbar>
 
     <div class="p-6">
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <FormSkeleton v-if="pending" :rows="6" />
       <div v-else-if="error" class="rounded border border-danger/30 bg-danger/5 p-4 text-sm text-danger">
         Could not load popup settings: {{ error.message }}
       </div>

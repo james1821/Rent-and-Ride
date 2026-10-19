@@ -9,7 +9,12 @@ import type { UserRole } from '~/types'
 
 const currentUser = ref<User | null>(null)
 const currentRole = ref<UserRole | null>(null)
+// authReady flips as soon as Firebase reports the signed-in/out state (fast,
+// local-only) so the `auth` middleware never waits on a network round-trip.
 const authReady = ref(false)
+// roleReady flips once the account profile (role) has been resolved; admin
+// routes wait on this because they need the role to decide access.
+const roleReady = ref(false)
 // True while register() is running: the Firebase Auth user exists before the
 // server has created users/{uid}, so the auth listener must not look up the
 // profile (and sign the user out) during that window.
@@ -27,33 +32,41 @@ export function useAuth() {
     onAuthStateChanged($auth, async (user) => {
       currentUser.value = user
       if (user && registering.value) return // register() sets the role itself when done
-      if (user) {
-        // `currentRole` stays null until the account's profile is confirmed, so
-        // the cart/favorites listeners (which need it) never start too early.
+
+      if (!user) {
         currentRole.value = null
-        try {
-          const profile = await apiFetch<{ role: UserRole }>('/api/customers/me')
-          currentRole.value = profile?.role ?? 'customer'
-        } catch (err: any) {
-          if (/user record not found/i.test(err?.message ?? '')) {
-            // Signed in with Firebase Auth, but no users/{uid} document exists in Firestore
-            // (registration never completed, or the database was reset). Nothing else can
-            // work for this account, so sign out with an explanation instead of erroring.
-            console.warn('[auth] Signed-in account has no users/' + user.uid + ' record — signing out.')
-            useToast().add({
-              title: 'Account setup is incomplete',
-              description: 'This login has no profile record. Please register a new account, or contact support.',
-              color: 'red'
-            })
-            await firebaseSignOut($auth)
-            return
-          }
-          currentRole.value = 'customer' // e.g. customers record missing or a temporary API error
-        }
-      } else {
-        currentRole.value = null
+        authReady.value = true
+        roleReady.value = true
+        return
       }
+
+      // Signed-in state is known now; unblock the `auth` middleware immediately
+      // instead of waiting for the profile fetch below.
       authReady.value = true
+      // `currentRole` stays null until the account's profile is confirmed, so
+      // the cart/favorites listeners (which need it) never start too early.
+      currentRole.value = null
+      try {
+        const profile = await apiFetch<{ role: UserRole }>('/api/customers/me')
+        currentRole.value = profile?.role ?? 'customer'
+      } catch (err: any) {
+        if (/user record not found/i.test(err?.message ?? '')) {
+          // Signed in with Firebase Auth, but no users/{uid} document exists in Firestore
+          // (registration never completed, or the database was reset). Nothing else can
+          // work for this account, so sign out with an explanation instead of erroring.
+          console.warn('[auth] Signed-in account has no users/' + user.uid + ' record — signing out.')
+          useToast().add({
+            title: 'Account setup is incomplete',
+            description: 'This login has no profile record. Please register a new account, or contact support.',
+            color: 'red'
+          })
+          await firebaseSignOut($auth)
+          roleReady.value = true
+          return
+        }
+        currentRole.value = 'customer' // e.g. customers record missing or a temporary API error
+      }
+      roleReady.value = true
     })
   }
 
@@ -72,6 +85,7 @@ export function useAuth() {
       })
       currentRole.value = 'customer'
       authReady.value = true
+      roleReady.value = true
       return credential.user
     } catch (err) {
       // Don't leave a half-created login behind (Auth user without a profile),
@@ -97,5 +111,5 @@ export function useAuth() {
   const isAdmin = computed(() => currentRole.value === 'admin' || currentRole.value === 'staff')
   const isAuthenticated = computed(() => !!currentUser.value)
 
-  return { currentUser, currentRole, authReady, isAdmin, isAuthenticated, register, login, logout }
+  return { currentUser, currentRole, authReady, roleReady, isAdmin, isAuthenticated, register, login, logout }
 }

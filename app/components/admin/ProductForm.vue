@@ -4,11 +4,11 @@ const { apiFetch } = useApi()
 const toast = useToast()
 const router = useRouter()
 
-const { data: categories } = await useAsyncData('form-categories', () =>
+const { data: categories } = await usePageData('form-categories', () =>
   apiFetch<any[]>('/api/categories', { query: { includeInactive: true } }),
   { server: false }
 )
-const { data: subcategories } = await useAsyncData(
+const { data: subcategories } = await usePageData(
   'form-subcategories',
   () => apiFetch<any[]>('/api/subcategories', { query: { includeInactive: true } }),
   { server: false }

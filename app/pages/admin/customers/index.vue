@@ -5,7 +5,7 @@ const { apiFetch } = useApi()
 const { format } = useCurrency()
 const search = ref('')
 
-const { data, refresh, pending } = await useAsyncData(
+const { data, refresh, pending } = await usePageData(
   'admin-customers',
   () => apiFetch<any>('/api/admin/customers', { query: { search: search.value || undefined, pageSize: 100 } }),
   { watch: [search], server: false }
@@ -21,7 +21,7 @@ const { data, refresh, pending } = await useAsyncData(
     <div class="p-6">
       <input v-model="search" placeholder="Search name, email, or phone…" class="mb-4 w-full max-w-sm rounded border border-line bg-surface px-3 py-2 text-sm text-ink">
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="8" :cols="6" />
 
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>

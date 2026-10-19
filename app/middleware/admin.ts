@@ -2,7 +2,7 @@
 export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return
 
-  const { isAuthenticated, isAdmin, authReady } = useAuth()
+  const { isAuthenticated, isAdmin, roleReady } = useAuth()
 
   const decide = () => {
     if (!isAuthenticated.value) return navigateTo(`/login?redirect=${encodeURIComponent(to.fullPath)}`)
@@ -10,10 +10,10 @@ export default defineNuxtRouteMiddleware((to) => {
     return undefined
   }
 
-  if (authReady.value) return decide()
+  if (roleReady.value) return decide()
 
   return new Promise((resolve) => {
-    const stop = watch(authReady, (ready) => {
+    const stop = watch(roleReady, (ready) => {
       if (!ready) return
       stop()
       resolve(decide())

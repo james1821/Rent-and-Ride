@@ -3,7 +3,7 @@ const props = defineProps<{ productId: string }>()
 const { apiFetch } = useApi()
 const toast = useToast()
 
-const { data: units, refresh, pending } = await useAsyncData(
+const { data: units, refresh, pending } = await usePageData(
   `inventory-${props.productId}`,
   () => apiFetch<any[]>(`/api/products/${props.productId}/inventory`),
   { server: false }
@@ -47,7 +47,7 @@ async function updateUnit(unitId: string, patch: Record<string, unknown>) {
       Optional per-vehicle tracking (plate number or chassis/VIN) for condition and maintenance history — availability calculations use total quantity, not individual unit assignment yet.
     </p>
 
-    <div v-if="pending" class="mt-4 text-sm text-ink-muted">Loading…</div>
+    <TableSkeleton v-if="pending" class="mt-4" :rows="3" :cols="3" />
 
     <table v-else class="mt-4 w-full overflow-hidden rounded border border-line bg-surface text-sm">
       <thead>

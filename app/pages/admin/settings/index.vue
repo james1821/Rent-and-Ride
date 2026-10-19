@@ -5,7 +5,7 @@ const toast = useToast()
 
 const form = reactive({ companyName: '', contactEmail: '', contactPhone: '', address: '', facebook: '', instagram: '' })
 
-const { data } = await useAsyncData('admin-settings-general', () =>
+const { data, pending } = await usePageData('admin-settings-general', () =>
   apiFetch<any>('/api/settings/general').catch(() => null),
   { server: false }
 )
@@ -38,6 +38,8 @@ async function save() {
     </AdminTopbar>
 
     <div class="max-w-lg space-y-4 p-6">
+      <FormSkeleton v-if="pending" :rows="6" />
+      <template v-else>
       <div>
         <label class="text-xs text-ink-muted">Company Name</label>
         <input v-model="form.companyName" class="mt-1 w-full rounded border border-line bg-surface px-3 py-2 text-sm text-ink">
@@ -67,6 +69,7 @@ async function save() {
       <button class="rounded-full bg-ink px-6 py-2 text-sm font-semibold text-white hover:bg-ink-soft disabled:opacity-50" :disabled="saving" @click="save">
         {{ saving ? 'Saving…' : 'Save Settings' }}
       </button>
+      </template>
     </div>
   </div>
 </template>

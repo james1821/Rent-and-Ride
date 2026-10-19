@@ -178,13 +178,16 @@ Admin uploads (vehicle photos, popup and banner images) are sent to
 This works identically from local dev and production, including serverless
 hosts (Vercel/Netlify/Cloud Run) whose filesystems are ephemeral.
 
-Setup:
+Setup (unsigned uploads — no API key/secret needed):
 
-1. Create a free account at https://cloudinary.com and open the Dashboard.
-2. Set these server-only variables in `.env` locally and in your host's
-   environment configuration (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
-   `CLOUDINARY_API_SECRET`, and optionally `CLOUDINARY_FOLDER`).
-3. Redeploy/restart the app. Uploads from **Admin → Vehicles / Banners /
+1. Create a free account at https://cloudinary.com.
+2. Copy your **Cloud name** from the Dashboard.
+3. Create an **unsigned upload preset**: Settings → Upload → Add upload preset →
+   set *Signing Mode* to **Unsigned** → Save. Note the preset name.
+4. Set these server-only variables in `.env` locally and in your host's
+   environment configuration: `CLOUDINARY_CLOUD_NAME`,
+   `CLOUDINARY_UPLOAD_PRESET`, and optionally `CLOUDINARY_FOLDER`.
+5. Redeploy/restart the app. Uploads from **Admin → Vehicles / Banners /
    Promotional Popup / Settings** will now be served from `res.cloudinary.com`.
 
 Uploads are capped at 4 MB (serverless request-body limit) and limited to JPEG,

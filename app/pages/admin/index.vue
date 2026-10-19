@@ -4,7 +4,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' })
 const { apiFetch } = useApi()
 const { format } = useCurrency()
 
-const { data, pending, error } = await useAsyncData('admin-dashboard', () =>
+const { data, pending, error } = await usePageData('admin-dashboard', () =>
   apiFetch<any>('/api/admin/dashboard/stats'),
   { server: false }
 )
@@ -27,7 +27,14 @@ const cards = computed(() => data.value ? [
     </AdminTopbar>
 
     <div class="p-6">
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <div v-if="pending" class="space-y-8">
+        <StatGridSkeleton :count="8" />
+        <div class="grid gap-6 lg:grid-cols-2">
+          <div class="skeleton h-44 rounded border border-line" />
+          <div class="skeleton h-44 rounded border border-line" />
+        </div>
+        <TableSkeleton :rows="5" :cols="4" />
+      </div>
 
       <div v-else-if="!data" class="rounded border border-danger/30 bg-danger/5 p-4 text-sm text-danger">
         Could not load dashboard data{{ error?.message ? `: ${error.message}` : '' }}. Check that the server can reach Firebase (see .env).

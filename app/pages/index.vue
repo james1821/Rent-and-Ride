@@ -4,7 +4,7 @@ const { fetchProducts, fetchCategories, fetchBrands } = useCatalog()
 // Default hero, used when the admin hasn't created any "hero" banners.
 const defaultSlides = [
   {
-    title: 'Go anywhere, anytime. Rent a car or motorcycle today.',
+    title: 'Go anywhere, anytime. Rent a vehicle today.',
     description: 'Cars and motorcycles for daily, weekly and monthly rental. Live availability, clear rates, pickup or delivery.',
     ctaLabel: 'Browse Cars',
     ctaHref: '/catalog?vehicleType=car',

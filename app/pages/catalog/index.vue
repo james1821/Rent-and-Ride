@@ -3,22 +3,26 @@ const route = useRoute()
 const router = useRouter()
 const { fetchProducts, fetchCategories, fetchSubcategories, fetchBrands } = useCatalog()
 
-const filters = reactive({
-  q: (route.query.q as string) ?? '',
-  categoryId: (route.query.categoryId as string) ?? '',
-  subcategoryId: (route.query.subcategoryId as string) ?? '',
-  brand: (route.query.brand as string) ?? '',
-  vehicleType: ((route.query.vehicleType as string) ?? '') as '' | 'car' | 'motorcycle',
-  transmission: (route.query.transmission as string) ?? '',
-  fuelType: (route.query.fuelType as string) ?? '',
-  minSeats: route.query.minSeats ? Number(route.query.minSeats) : undefined,
-  minPrice: route.query.minPrice ? Number(route.query.minPrice) : undefined,
-  maxPrice: route.query.maxPrice ? Number(route.query.maxPrice) : undefined,
-  availableOnly: route.query.availableOnly === 'true',
-  featuredOnly: route.query.featuredOnly === 'true',
-  sort: (route.query.sort as any) ?? 'newest',
-  page: route.query.page ? Number(route.query.page) : 1
-})
+function filtersFromQuery(q: Record<string, any>) {
+  return {
+    q: (q.q as string) ?? '',
+    categoryId: (q.categoryId as string) ?? '',
+    subcategoryId: (q.subcategoryId as string) ?? '',
+    brand: (q.brand as string) ?? '',
+    vehicleType: ((q.vehicleType as string) ?? '') as '' | 'car' | 'motorcycle',
+    transmission: (q.transmission as string) ?? '',
+    fuelType: (q.fuelType as string) ?? '',
+    minSeats: q.minSeats ? Number(q.minSeats) : undefined,
+    minPrice: q.minPrice ? Number(q.minPrice) : undefined,
+    maxPrice: q.maxPrice ? Number(q.maxPrice) : undefined,
+    availableOnly: q.availableOnly === 'true',
+    featuredOnly: q.featuredOnly === 'true',
+    sort: (q.sort as any) ?? 'newest',
+    page: q.page ? Number(q.page) : 1
+  }
+}
+
+const filters = reactive(filtersFromQuery(route.query))
 
 const { data: categories, pending: categoriesPending } = await usePageData('catalog-categories', () => fetchCategories())
 const { data: subcategories, pending: subcategoriesPending } = await usePageData(
@@ -54,6 +58,17 @@ watch(() => JSON.stringify({ ...filters, page: 0 }), () => { if (filters.page !=
 
 watch(filters, () => {
   router.replace({ query: { ...filters, page: filters.page } as any })
+}, { deep: true })
+
+// The header/footer links (Cars, Motorcycles, All Vehicles) navigate to the
+// *same* /catalog route and only change the query string. Vue Router reuses
+// this component in that case, so `setup` does not run again and `filters`
+// would keep its old values. Mirror the URL back into `filters` so the list
+// refetches. The equality check below prevents a replace/observe loop.
+watch(() => route.query, (q) => {
+  const next = filtersFromQuery(q)
+  if (JSON.stringify(next) === JSON.stringify({ ...filters })) return
+  Object.assign(filters, next)
 }, { deep: true })
 
 const { data: brands, pending: brandsPending } = await usePageData('catalog-brands', () => fetchBrands())

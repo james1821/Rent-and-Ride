@@ -4,7 +4,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' })
 const { apiFetch } = useApi()
 const toast = useToast()
 
-const { data: categories, refresh, pending } = await useAsyncData('admin-categories', () =>
+const { data: categories, refresh, pending } = await usePageData('admin-categories', () =>
   apiFetch<any[]>('/api/categories', { query: { includeInactive: true } }),
   { server: false }
 )
@@ -72,7 +72,7 @@ async function deactivate(id: string) {
         </button>
       </div>
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="6" :cols="5" />
 
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>

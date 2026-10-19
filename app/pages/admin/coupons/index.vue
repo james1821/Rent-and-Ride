@@ -3,7 +3,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' })
 const { apiFetch } = useApi()
 const toast = useToast()
 
-const { data: coupons, refresh, pending } = await useAsyncData('admin-coupons', () => apiFetch<any[]>('/api/coupons'), { server: false })
+const { data: coupons, refresh, pending } = await usePageData('admin-coupons', () => apiFetch<any[]>('/api/coupons'), { server: false })
 
 const showForm = ref(false)
 const form = reactive({ code: '', type: 'percent' as 'percent' | 'fixed', value: 10, minSubtotal: undefined as number | undefined, maxUses: undefined as number | undefined, validFrom: '', validTo: '', status: 'active' as 'active' | 'inactive' })
@@ -34,7 +34,7 @@ async function save() {
         <button class="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink-soft" @click="showForm = true">+ New Coupon</button>
       </div>
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="6" :cols="5" />
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>
           <tr class="border-b border-line text-left text-xs uppercase tracking-wide text-ink-muted">

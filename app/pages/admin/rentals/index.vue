@@ -8,7 +8,7 @@ const { format } = useCurrency()
 const status = ref((route.query.status as string) ?? '')
 const search = ref('')
 
-const { data, refresh, pending } = await useAsyncData(
+const { data, refresh, pending } = await usePageData(
   'admin-rentals',
   () => listRentals({ status: (status.value || undefined) as any, search: search.value || undefined, pageSize: 100 }),
   { watch: [status, search], server: false }
@@ -36,7 +36,7 @@ const statusColor: Record<string, string> = {
         </select>
       </div>
 
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="8" :cols="5" />
 
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>

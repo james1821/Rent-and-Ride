@@ -1,13 +1,13 @@
-import { createHash } from 'node:crypto'
-
-// Minimal signed-upload client for Cloudinary's REST API.
-// We deliberately avoid the `cloudinary` SDK so the Nitro server bundle stays
-// small and dependency-free — Node 18+'s global fetch/FormData/Blob are enough.
+// Minimal unsigned-upload client for Cloudinary's REST API.
+// Uses an *unsigned* upload preset, so only the cloud name and preset name are
+// needed — no API key or API secret. We deliberately avoid the `cloudinary` SDK
+// so the Nitro server bundle stays small and dependency-free (Node 18+'s global
+// fetch/FormData/Blob are enough).
 
 export interface CloudinaryConfig {
   cloudName?: string
-  apiKey?: string
-  apiSecret?: string
+  /** Name of an unsigned upload preset (Cloudinary → Settings → Upload). */
+  uploadPreset?: string
   /** Optional top-level folder all uploads are grouped under. */
   folder?: string
 }
@@ -17,35 +17,24 @@ export interface CloudinaryUploadResult {
   publicId: string
 }
 
-// Cloudinary signs the request by sorting the parameters alphabetically,
-// joining them as `key=value&...`, appending the API secret, then SHA-1 hashing.
-function sign(params: Record<string, string>, apiSecret: string): string {
-  const toSign = Object.keys(params)
-    .sort()
-    .map((key) => `${key}=${params[key]}`)
-    .join('&')
-  return createHash('sha1').update(`${toSign}${apiSecret}`).digest('hex')
-}
-
 export async function uploadToCloudinary(
   file: { data: Buffer, filename: string, mimeType: string },
   folder: string,
   config: CloudinaryConfig
 ): Promise<CloudinaryUploadResult> {
-  const { cloudName, apiKey, apiSecret } = config
-  if (!cloudName || !apiKey || !apiSecret) {
-    throw new Error('Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET.')
+  const { cloudName, uploadPreset } = config
+  if (!cloudName || !uploadPreset) {
+    throw new Error('Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME and CLOUDINARY_UPLOAD_PRESET.')
   }
 
   const targetFolder = [config.folder, folder].filter(Boolean).join('/')
-  const timestamp = Math.floor(Date.now() / 1000).toString()
 
   const form = new FormData()
   form.append('file', new Blob([file.data], { type: file.mimeType }), file.filename)
-  form.append('api_key', apiKey)
-  form.append('timestamp', timestamp)
+  form.append('upload_preset', uploadPreset)
+  // Unsigned uploads accept a `folder`; if the preset pins its own folder,
+  // Cloudinary ignores/uses that instead.
   if (targetFolder) form.append('folder', targetFolder)
-  form.append('signature', sign(targetFolder ? { folder: targetFolder, timestamp } : { timestamp }, apiSecret))
 
   const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
     method: 'POST',

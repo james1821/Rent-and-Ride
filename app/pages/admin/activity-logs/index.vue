@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 const { apiFetch } = useApi()
-const { data: logs, pending } = await useAsyncData('admin-activity-logs', () => apiFetch<any[]>('/api/admin/activity-logs'), { server: false })
+const { data: logs, pending } = await usePageData('admin-activity-logs', () => apiFetch<any[]>('/api/admin/activity-logs'), { server: false })
 </script>
 
 <template>
@@ -11,7 +11,7 @@ const { data: logs, pending } = await useAsyncData('admin-activity-logs', () => 
     </AdminTopbar>
 
     <div class="p-6">
-      <div v-if="pending" class="text-ink-muted">Loading…</div>
+      <TableSkeleton v-if="pending" :rows="8" :cols="4" />
       <table v-else class="w-full overflow-hidden rounded border border-line bg-surface text-sm">
         <thead>
           <tr class="border-b border-line text-left text-xs uppercase tracking-wide text-ink-muted">

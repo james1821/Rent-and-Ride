@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'page', mode: 'out-in' },
     head: {
-      title: `${process.env.NUXT_PUBLIC_SITE_NAME || 'RentRide'} — Cars & Motorcycles for Rent`,
+      title: `${process.env.NUXT_PUBLIC_SITE_NAME || 'RentRide'} - Cars & Motorcycles for Rent`,
       meta: [
         { name: 'description', content: 'Rent cars and motorcycles by the day, week or month. Live availability, transparent rates, pickup or delivery.' }
       ],
@@ -76,13 +76,13 @@ export default defineNuxtConfig({
       privateKey: process.env.FIREBASE_PRIVATE_KEY
     },
 
-    // Cloudinary (server-only). Admin uploads are sent here and the returned
-    // HTTPS URL is stored in Firestore. Works from any environment, including
-    // serverless hosts with an ephemeral filesystem (Vercel/Netlify/Cloud Run).
+    // Cloudinary (server-only). Admin uploads are sent here via an *unsigned*
+    // upload preset and the returned HTTPS URL is stored in Firestore. Works
+    // from any environment, including serverless hosts (Vercel/Netlify/Cloud
+    // Run) whose filesystem is ephemeral. Free tier; no API key/secret needed.
     cloudinary: {
       cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-      apiKey: process.env.CLOUDINARY_API_KEY,
-      apiSecret: process.env.CLOUDINARY_API_SECRET,
+      uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
       folder: process.env.CLOUDINARY_FOLDER || 'rentandride'
     },
 

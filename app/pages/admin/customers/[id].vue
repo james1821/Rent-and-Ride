@@ -7,7 +7,7 @@ const { apiFetch } = useApi()
 const { format } = useCurrency()
 const toast = useToast()
 
-const { data, refresh, pending } = await useAsyncData(`admin-customer-${id}`, () =>
+const { data, refresh, pending } = await usePageData(`admin-customer-${id}`, () =>
   apiFetch<any>(`/api/admin/customers/${id}`),
   { server: false }
 )
@@ -37,7 +37,9 @@ async function toggleStatus() {
 </script>
 
 <template>
-  <div v-if="data">
+  <ListSkeleton v-if="pending" class="p-6" :rows="4" />
+
+  <div v-else-if="data">
     <AdminTopbar>
       <template #title><h1 class="font-display text-lg font-bold text-ink">{{ data.customer.firstName }} {{ data.customer.lastName }}</h1></template>
     </AdminTopbar>
@@ -92,4 +94,6 @@ async function toggleStatus() {
       </aside>
     </div>
   </div>
+
+  <div v-else class="p-6 text-ink-muted">Customer not found.</div>
 </template>

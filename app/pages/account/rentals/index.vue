@@ -4,7 +4,7 @@ definePageMeta({ middleware: 'auth' })
 const { listRentals } = useRentals()
 const { format } = useCurrency()
 
-const { data, pending } = await useAsyncData('my-rentals', () => listRentals({ pageSize: 50 }))
+const { data, pending } = await usePageData('my-rentals', () => listRentals({ pageSize: 50 }), { server: false })
 
 const statusColor: Record<string, string> = {
   PENDING: 'text-warn', CONFIRMED: 'text-ok', ACTIVE: 'text-ok',
@@ -16,7 +16,7 @@ const statusColor: Record<string, string> = {
   <div class="container-page py-10">
     <h1 class="text-4xl text-ink sm:text-5xl">Your Rentals</h1>
 
-    <div v-if="pending" class="mt-10 text-ink-muted">Loading…</div>
+    <ListSkeleton v-if="pending" class="mt-10" :rows="4" />
 
     <div v-else-if="!data?.items.length" class="mt-16 rounded border border-dashed border-line py-20 text-center">
       <p class="text-ink-muted">You haven't made any rentals yet.</p>
