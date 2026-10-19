@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-06-01',
@@ -108,6 +110,20 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       asyncContext: true
-    }
+    },
+
+    // Pre-Cloudinary images committed at ./uploads were saved to Firestore as
+    // "/uploads/..." paths, but only the build output is deployed — so on
+    // Vercel/Netlify (whose filesystem is ephemeral and never ships the repo's
+    // ./uploads dir) those images 404ed. Exposing ./uploads as a public asset
+    // copies it to .output/public/uploads/** so the platform's CDN serves the
+    // exact same URLs, with no per-request filesystem access.
+    publicAssets: [
+      {
+        dir: fileURLToPath(new URL('./uploads', import.meta.url)),
+        baseURL: '/uploads',
+        maxAge: 60 * 60 * 24 * 365
+      }
+    ]
   }
 })

@@ -2,9 +2,13 @@ import { readFile } from 'node:fs/promises'
 import { extname, resolve, sep } from 'node:path'
 
 // LEGACY: serves images uploaded before the switch to Cloudinary (see
-// upload-image.post.ts, which now stores files in Cloudinary). Only useful in
-// local dev, where the old ./uploads folder still exists; on serverless hosts
-// the filesystem is ephemeral and these paths will 404.
+// upload-image.post.ts, which now stores files in Cloudinary).
+//
+// In production these images are shipped as *static public assets* by the
+// `nitro.publicAssets` entry in nuxt.config.ts (copied to
+// .output/public/uploads/**), so the platform CDN serves them before this
+// handler is ever reached. This route is a local-dev fallback that reads the
+// same ./uploads directory from disk.
 const MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.avif': 'image/avif', '.gif': 'image/gif'
 }
