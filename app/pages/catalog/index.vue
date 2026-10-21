@@ -95,7 +95,7 @@ function resetFilters() {
 
 <template>
   <div>
-    <section class="on-dark speed-lines bg-ink text-white">
+    <section class="on-dark bg-ink text-white">
       <div class="container-page py-12 sm:py-16">
         <p class="eyebrow !text-volt">Fleet</p>
         <h1 class="mt-3 text-5xl sm:text-7xl">

@@ -10,7 +10,6 @@ const broken = ref(false)
       class="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-110 group-hover:opacity-90"
       @error="broken = true"
     >
-    <div v-else class="speed-lines absolute inset-0" />
     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
     <div class="relative flex items-end justify-between gap-2">
       <span class="font-display text-2xl font-extrabold leading-none tracking-tight">{{ name }}</span>

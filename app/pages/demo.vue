@@ -53,7 +53,6 @@ const perks = [
     <section class="container-page py-16 sm:py-24">
       <div class="grid gap-5 md:grid-cols-2">
         <NuxtLink to="/catalog?vehicleType=car" class="on-dark card-lift group relative flex min-h-[260px] flex-col justify-between overflow-hidden rounded-2xl border border-ink bg-ink p-8 text-white sm:min-h-[340px]">
-          <div class="speed-lines absolute inset-0" />
           <p class="eyebrow relative !text-volt">Four wheels</p>
           <div class="relative flex items-end justify-between">
             <h2 class="text-6xl sm:text-8xl">Cars</h2>

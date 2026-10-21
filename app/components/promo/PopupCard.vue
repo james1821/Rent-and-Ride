@@ -27,7 +27,7 @@ const isExternal = computed(() => !!props.ctaHref && !props.ctaHref.startsWith('
 <template>
   <div
     class="relative w-full overflow-hidden rounded-2xl shadow-pop"
-    :class="hasImage ? ['bg-white text-ink', !stacked && 'md:grid md:grid-cols-[1fr_1fr]'] : 'on-dark speed-lines bg-ink text-white'"
+    :class="hasImage ? ['bg-white text-ink', !stacked && 'md:grid md:grid-cols-[1fr_1fr]'] : 'on-dark bg-ink text-white'"
   >
     <button
       type="button"

@@ -114,20 +114,18 @@ function submit() {
 <template>
   <div>
     <!-- ================= HERO ================= -->
-    <section class="on-dark speed-lines relative overflow-hidden bg-ink text-white">
-      <div class="pointer-events-none absolute -right-40 top-1/2 h-[560px] w-[560px] -translate-y-1/2 rounded-full bg-volt/10 blur-3xl" aria-hidden="true" />
-
-      <div class="container-page relative py-20 sm:py-28">
+    <section class="on-dark relative overflow-hidden bg-ink text-white">
+      <div class="container-page relative py-20 text-center sm:py-28">
         <p class="eyebrow !text-volt animate-fade-up">Car &amp; motorcycle rental software</p>
-        <h1 class="mt-5 max-w-4xl text-[clamp(2.5rem,7vw,4.75rem)] animate-fade-up" style="animation-delay:.06s">
+        <h1 class="mx-auto mt-5 max-w-4xl text-[clamp(2.5rem,7vw,4.75rem)] animate-fade-up" style="animation-delay:.06s">
           Your Rental Business.<br>Your Rules.<br><span class="text-volt">Your Platform.</span>
         </h1>
-        <p class="mt-7 max-w-xl text-lg text-white/70 animate-fade-up" style="animation-delay:.12s">
+        <p class="mx-auto mt-7 max-w-xl text-lg text-white/70 animate-fade-up" style="animation-delay:.12s">
           A complete rental platform with a storefront, bookings and an admin dashboard.
           Buy it, brand it and customize it for your business.
         </p>
 
-        <div class="mt-9 flex flex-wrap gap-3 animate-fade-up" style="animation-delay:.18s">
+        <div class="mt-9 flex flex-wrap justify-center gap-3 animate-fade-up" style="animation-delay:.18s">
           <a href="#contact" class="btn-light !px-8 !py-4 text-base">
             Book a Demo <UIcon name="i-heroicons-arrow-right" class="h-4 w-4" />
           </a>
@@ -136,7 +134,7 @@ function submit() {
           </NuxtLink>
         </div>
 
-        <ul class="mt-12 flex flex-wrap gap-x-6 gap-y-3 text-xs font-medium text-white/60">
+        <ul class="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-medium text-white/60">
           <li class="flex items-center gap-2"><UIcon name="i-heroicons-check-circle" class="h-4 w-4 text-volt" /> Storefront &amp; admin in one codebase</li>
           <li class="flex items-center gap-2"><UIcon name="i-heroicons-check-circle" class="h-4 w-4 text-volt" /> Role-based admin &amp; customer accounts</li>
           <li class="flex items-center gap-2"><UIcon name="i-heroicons-check-circle" class="h-4 w-4 text-volt" /> Live availability &amp; coupon support</li>
@@ -177,7 +175,7 @@ function submit() {
     </section>
 
     <!-- ================= ADMIN DASHBOARD ================= -->
-    <section id="admin" class="on-dark speed-lines scroll-mt-20 bg-ink py-20 text-white sm:py-28">
+    <section id="admin" class="on-dark scroll-mt-20 bg-ink py-20 text-white sm:py-28">
       <div class="container-page">
         <div class="max-w-2xl">
           <p class="eyebrow !text-volt">Admin dashboard</p>
@@ -298,7 +296,7 @@ function submit() {
 
     <!-- ================= FINAL CTA + CONTACT ================= -->
     <section id="contact" class="container-page scroll-mt-20 py-20 sm:py-28">
-      <div class="on-dark speed-lines overflow-hidden rounded-2xl bg-ink text-white">
+      <div class="on-dark overflow-hidden rounded-2xl bg-ink text-white">
         <div class="grid gap-12 p-8 sm:p-12 lg:grid-cols-2 lg:p-16">
           <div>
             <p class="eyebrow !text-volt">Get started</p>

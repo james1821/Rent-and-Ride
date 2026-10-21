@@ -102,11 +102,6 @@ html {
   transform: skewX(-12deg);
 }
 
-/* Diagonal "speed" stripes used as a subtle hero texture (pure CSS, no images). */
-.speed-lines {
-  background-image: repeating-linear-gradient(115deg, rgba(255,255,255,.06) 0 2px, transparent 2px 22px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
