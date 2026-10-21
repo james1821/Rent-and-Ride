@@ -17,6 +17,21 @@ export interface CloudinaryUploadResult {
   publicId: string
 }
 
+// Cloudinary re-encodes on delivery for free: `f_auto` serves the smallest
+// format the browser supports (AVIF → WebP → original fallback) and `q_auto`
+// picks a quality that stays visually identical at a fraction of the bytes.
+// Baking these into the stored URL means every <img src> benefits without the
+// client needing to know anything about Cloudinary.
+const OPTIMIZE = 'f_auto,q_auto'
+
+export function optimizeCloudinaryUrl(url: string): string {
+  if (!url || url.includes(OPTIMIZE)) return url
+  // e.g. .../image/upload/v1712345/folder/pic.jpg
+  //   -> .../image/upload/f_auto,q_auto/v1712345/folder/pic.jpg
+  // Only the delivery URL is touched; unknown shapes are returned unchanged.
+  return url.replace('/image/upload/', `/image/upload/${OPTIMIZE}/`)
+}
+
 export async function uploadToCloudinary(
   file: { data: Buffer, filename: string, mimeType: string },
   folder: string,
@@ -46,5 +61,5 @@ export async function uploadToCloudinary(
     throw new Error(payload?.error?.message ?? `Cloudinary upload failed (HTTP ${res.status})`)
   }
 
-  return { url: payload.secure_url as string, publicId: payload.public_id as string }
+  return { url: optimizeCloudinaryUrl(payload.secure_url as string), publicId: payload.public_id as string }
 }

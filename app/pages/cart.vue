@@ -41,10 +41,14 @@ function lineFor(item: typeof items.value[number]) {
           class="flex gap-4 rounded border border-line bg-surface p-4"
         >
           <img
-            :src="lineFor(item)?.productImage || 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=200&auto=format&fit=crop'"
-            class="h-20 w-20 rounded object-cover"
-            :alt="lineFor(item)?.productName ?? 'Product'"
+            v-if="lineFor(item)?.productImage"
+            :src="lineFor(item)?.productImage"
+            class="h-20 w-20 shrink-0 rounded object-cover"
+            :alt="lineFor(item)?.productName ?? 'Vehicle'"
           >
+          <div v-else class="flex h-20 w-20 shrink-0 items-center justify-center rounded bg-sunken text-ink-faint">
+            <UIcon name="i-heroicons-truck" class="h-7 w-7" />
+          </div>
           <div class="flex-1">
             <div class="flex items-start justify-between">
               <div>

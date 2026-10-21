@@ -221,7 +221,7 @@ async function onToggleFavorite() {
           </div>
 
           <p v-if="disabledDates.size" class="text-xs text-ink-muted">
-            {{ disabledDates.size }} day(s) in the next 90 are fully booked — availability below reflects your exact selection.
+            {{ disabledDates.size }} day(s) in the next 90 are fully booked. Availability below reflects your exact selection.
           </p>
 
           <p v-if="checkingAvailability" class="text-xs text-ink-muted" aria-live="polite">Checking availability…</p>
@@ -229,7 +229,7 @@ async function onToggleFavorite() {
             ✓ Available for these dates
           </p>
           <p v-else-if="availability" class="text-xs font-semibold text-danger" aria-live="polite">
-            Not available for these dates — only {{ availability.availableQuantity }} unit(s) free
+            Not available for these dates. Only {{ availability.availableQuantity }} unit(s) free
           </p>
 
           <div class="flex items-center justify-between border-t border-line pt-4 text-sm">

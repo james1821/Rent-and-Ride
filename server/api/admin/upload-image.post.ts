@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
   if (!file) return fail(400, 'No file received')
 
   const requestedFolder = parts.find((p) => p.name === 'folder')?.data?.toString()
-  const folder = FOLDERS.includes(folderRequested ?? '') ? folderRequested! : 'popup'
+  const folder = FOLDERS.includes(requestedFolder ?? '') ? requestedFolder! : 'popup'
 
   const mimeType = file.type ?? 'application/octet-stream'
   const ext = TYPES[mimeType]

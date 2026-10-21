@@ -99,7 +99,7 @@ const navLinks = [
             </NuxtLink>
           </div>
           <p v-if="!searchResults.products.length && !searchResults.categories.length" class="p-4 text-sm text-ink-muted">
-            No matches yet — keep typing.
+            No matches yet. Keep typing.
           </p>
         </div>
       </div>

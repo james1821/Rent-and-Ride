@@ -35,7 +35,7 @@ if (props.productId) {
     ...existing,
     images: existing.images?.length ? existing.images : ['']
   })
-  // Legacy documents may not have a vehicle block yet — keep the defaults.
+  // Legacy documents may not have a vehicle block yet, so keep the defaults.
   form.vehicle = { ...form.vehicle, ...(existing.vehicle ?? {}) }
   for (const k of ['year', 'seats', 'engineDisplacement', 'mileage'] as const) {
     if (existing.vehicle?.[k] == null) form.vehicle[k] = ''
@@ -156,7 +156,7 @@ async function save() {
         <div>
           <label class="text-xs text-ink-muted">Transmission</label>
           <select v-model="form.vehicle.transmission" class="input mt-1">
-            <option value="">—</option>
+            <option value="">Not specified</option>
             <option value="automatic">Automatic</option>
             <option value="manual">Manual</option>
             <option value="semi-automatic">Semi-automatic</option>
@@ -165,7 +165,7 @@ async function save() {
         <div>
           <label class="text-xs text-ink-muted">Fuel type</label>
           <select v-model="form.vehicle.fuelType" class="input mt-1">
-            <option value="">—</option>
+            <option value="">Not specified</option>
             <option value="gasoline">Gasoline</option>
             <option value="diesel">Diesel</option>
             <option value="hybrid">Hybrid</option>
@@ -207,7 +207,7 @@ async function save() {
         <h2 class="text-sm">Extra specifications</h2>
         <button type="button" class="text-xs font-semibold text-ink hover:underline" @click="addSpec">+ Add spec</button>
       </div>
-      <p v-if="!form.specifications.length" class="text-xs text-ink-muted">Optional — e.g. Features: Bluetooth, ABS · Luggage: 2 helmets.</p>
+      <p v-if="!form.specifications.length" class="text-xs text-ink-muted">Optional. Example: Features: Bluetooth, ABS · Luggage: 2 helmets.</p>
       <div v-for="(spec, i) in form.specifications" :key="i" class="flex gap-2">
         <input v-model="spec.label" placeholder="Label (e.g. Features)" class="input flex-1">
         <input v-model="spec.value" placeholder="Value (e.g. Bluetooth, ABS)" class="input flex-1">

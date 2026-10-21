@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Presentational popup card — shared by the storefront modal and the admin live preview.
+// Presentational popup card, shared by the storefront modal and the admin live preview.
 import { isSafeLink } from '~/composables/usePromoPopup'
 
 const props = defineProps<{

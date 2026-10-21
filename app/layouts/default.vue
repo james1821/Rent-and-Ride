@@ -8,7 +8,7 @@
       <slot />
     </main>
     <LayoutSiteFooter />
-    <!-- First-visit promotional popup — configured in Admin → Promotional Popup -->
+    <!-- First-visit promotional popup, configured in Admin → Promotional Popup -->
     <PromoPopupBanner />
   </div>
 </template>

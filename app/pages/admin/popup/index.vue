@@ -43,7 +43,7 @@ watch(data, (d) => {
 const status = computed(() => {
   if (!form.enabled) return { label: 'Disabled', tone: 'text-ink-muted', dot: 'bg-ink-faint' }
   const now = Date.now()
-  if (form.startLocal && now < new Date(form.startLocal).getTime()) return { label: 'Scheduled — not live yet', tone: 'text-warn', dot: 'bg-warn' }
+  if (form.startLocal && now < new Date(form.startLocal).getTime()) return { label: 'Scheduled. Not live yet', tone: 'text-warn', dot: 'bg-warn' }
   if (form.endLocal && now > new Date(form.endLocal).getTime()) return { label: 'Expired', tone: 'text-danger', dot: 'bg-danger' }
   return { label: 'Live', tone: 'text-ok', dot: 'bg-ok' }
 })

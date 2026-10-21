@@ -44,7 +44,7 @@ async function updateUnit(unitId: string, patch: Record<string, unknown>) {
   <div>
     <h2 class="font-display text-base font-semibold text-ink">Individual Units (Plate / Chassis Tracking)</h2>
     <p class="mt-1 text-xs text-ink-muted">
-      Optional per-vehicle tracking (plate number or chassis/VIN) for condition and maintenance history — availability calculations use total quantity, not individual unit assignment yet.
+      Optional per-vehicle tracking (plate number or chassis/VIN) for condition and maintenance history. Availability calculations use total quantity, not individual unit assignment yet.
     </p>
 
     <TableSkeleton v-if="pending" class="mt-4" :rows="3" :cols="3" />

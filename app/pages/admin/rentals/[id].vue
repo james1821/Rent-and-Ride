@@ -9,7 +9,7 @@ const toast = useToast()
 
 const { data: rental, refresh, pending } = await usePageData(`admin-rental-${id}`, () => getRental(id), { server: false })
 
-// Mirrors RENTAL_STATUS_TRANSITIONS in server/types — kept here for the UI's
+// Mirrors RENTAL_STATUS_TRANSITIONS in server/types, kept here for the UI's
 // "next status" buttons; the server is still the source of truth and will
 // reject anything not actually valid.
 const nextStatusOptions: Record<string, string[]> = {
@@ -85,8 +85,7 @@ async function changeStatus(status: string) {
         <section class="rounded border border-line bg-surface p-5">
           <h2 class="font-display text-base font-semibold text-ink">Fulfillment & Notes</h2>
           <p class="mt-2 text-sm text-ink-muted">
-            {{ rental.fulfillment.method === 'pickup' ? 'In-store pickup' : 'Delivery' }}
-            <span v-if="rental.fulfillment.address">— {{ rental.fulfillment.address.line1 }}, {{ rental.fulfillment.address.city }}</span>
+            {{ rental.fulfillment.method === 'pickup' ? 'In-store pickup' : 'Delivery' }}<span v-if="rental.fulfillment.address">: {{ rental.fulfillment.address.line1 }}, {{ rental.fulfillment.address.city }}</span>
           </p>
           <p v-if="rental.notes" class="mt-2 text-sm text-ink">Customer notes: {{ rental.notes }}</p>
           <p v-if="rental.internalNotes" class="mt-2 text-sm text-warn">Internal: {{ rental.internalNotes }}</p>

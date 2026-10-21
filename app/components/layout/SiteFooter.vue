@@ -30,7 +30,7 @@ const socials = computed(() => general.value?.socials ?? {})
             <span class="brand-dot" /> {{ siteName }}
           </NuxtLink>
           <p class="mt-3 max-w-xs text-sm text-white/60">
-            Cars and motorcycles for rent — by the day, week or month. Pick up in store or have it delivered.
+            Cars and motorcycles for rent by the day, week or month. Pick up in store or have it delivered.
           </p>
           <div class="mt-5 flex gap-3">
             <a v-if="socials.facebook" :href="socials.facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="rounded-full border border-white/20 p-2.5 text-white/70 transition hover:border-volt hover:text-volt"><UIcon name="i-simple-icons-facebook" class="h-4 w-4" /></a>
@@ -53,6 +53,7 @@ const socials = computed(() => general.value?.socials ?? {})
           <ul class="mt-4 space-y-2.5 text-sm">
             <li><NuxtLink to="/about" class="text-white/70 transition hover:text-white">About Us</NuxtLink></li>
             <li><NuxtLink to="/contact" class="text-white/70 transition hover:text-white">Contact</NuxtLink></li>
+            <li><NuxtLink to="/" class="font-semibold text-volt transition hover:text-white">Own this platform →</NuxtLink></li>
             <li><NuxtLink to="/policies/rental" class="text-white/70 transition hover:text-white">Rental Policy</NuxtLink></li>
             <li><NuxtLink to="/policies/terms" class="text-white/70 transition hover:text-white">Terms of Service</NuxtLink></li>
             <li><NuxtLink to="/policies/privacy" class="text-white/70 transition hover:text-white">Privacy Policy</NuxtLink></li>

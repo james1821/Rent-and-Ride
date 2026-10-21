@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const steps = [
   { icon: 'i-heroicons-magnifying-glass', title: 'Pick your ride', description: 'Browse cars and motorcycles, filter by type, transmission or seats.' },
-  { icon: 'i-heroicons-calendar-days', title: 'Choose your dates', description: 'Select pickup and return dates — availability is checked live.' },
+  { icon: 'i-heroicons-calendar-days', title: 'Choose your dates', description: 'Select pickup and return dates. Availability is checked live.' },
   { icon: 'i-heroicons-check-circle', title: 'Confirm your booking', description: 'Review the rate and deposit, then send your booking request.' },
   { icon: 'i-heroicons-key', title: 'Pick up & return', description: 'Collect it in store or have it delivered, and bring it back on time.' }
 ]

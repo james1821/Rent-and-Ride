@@ -64,10 +64,7 @@ async function onCancel() {
         <section class="rounded border border-line bg-surface p-5">
           <h2 class="font-display text-base font-semibold text-ink">Fulfillment</h2>
           <p class="mt-2 text-sm text-ink-muted">
-            {{ rental.fulfillment.method === 'pickup' ? 'In-store pickup' : 'Delivery' }}
-            <span v-if="rental.fulfillment.address">
-              — {{ rental.fulfillment.address.line1 }}, {{ rental.fulfillment.address.city }}
-            </span>
+            {{ rental.fulfillment.method === 'pickup' ? 'In-store pickup' : 'Delivery' }}<span v-if="rental.fulfillment.address">: {{ rental.fulfillment.address.line1 }}, {{ rental.fulfillment.address.city }}</span>
           </p>
           <p v-if="rental.notes" class="mt-2 text-sm text-ink-muted">Notes: {{ rental.notes }}</p>
         </section>

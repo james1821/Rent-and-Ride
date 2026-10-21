@@ -57,7 +57,7 @@ async function archiveProduct(id: string) {
                 <p class="text-xs text-ink-muted">{{ p.brand }}{{ p.vehicle?.year ? ` · ${p.vehicle.year}` : '' }}</p>
               </div>
             </td>
-            <td class="p-3 capitalize text-ink">{{ p.vehicle?.type ?? '—' }}</td>
+            <td class="p-3 capitalize text-ink">{{ p.vehicle?.type ?? 'n/a' }}</td>
             <td class="p-3 font-mono text-xs text-ink-muted">
               {{ p.sku }}
             </td>
