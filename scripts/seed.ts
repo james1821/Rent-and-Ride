@@ -176,7 +176,7 @@ async function seed() {
   await db.collection('settings').doc('general').set({
     companyName: process.env.NUXT_PUBLIC_SITE_NAME || 'RentRide',
     contactEmail: 'hello@example.com',
-    contactPhone: '+63 917 000 0000',
+    contactPhone: '09754652169',
     address: '',
     socials: { facebook: '', instagram: '' },
     updatedAt: FieldValue.serverTimestamp()

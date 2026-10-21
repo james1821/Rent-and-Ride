@@ -6,7 +6,7 @@ const { data: general } = useAsyncData('site-general', async () => {
   } catch { return null }
 })
 const email = computed(() => general.value?.contactEmail || 'hello@example.com')
-const phone = computed(() => general.value?.contactPhone || '+63 917 000 0000')
+const phone = computed(() => general.value?.contactPhone || '09754652169')
 const address = computed(() => general.value?.address || '')
 </script>
 

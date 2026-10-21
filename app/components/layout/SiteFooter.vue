@@ -11,7 +11,7 @@ const { data: general } = useAsyncData('site-general', async () => {
 })
 const contact = computed(() => ({
   email: general.value?.contactEmail || 'hello@example.com',
-  phone: general.value?.contactPhone || '+63 917 000 0000',
+  phone: general.value?.contactPhone || '09754652169',
   address: general.value?.address || ''
 }))
 const socials = computed(() => general.value?.socials ?? {})
